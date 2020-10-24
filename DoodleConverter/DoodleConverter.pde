@@ -18,7 +18,7 @@ for (int n = 0; n < total; n++)
     byte val = data[index];
     outdata[outindex] = val;
     outindex++;
-    img.pixels[i] = color(val & 0xff);
+    img.pixels[i] = color(255 - val & 0xff);
   }
   img.updatePixels();
   int x = (n % 20) * 28;
@@ -26,4 +26,4 @@ for (int n = 0; n < total; n++)
   image(img, x, y);
 }
 
-saveBytes("trains1000.bin", outdata);
+saveBytes("pianos1000.bin", outdata);
