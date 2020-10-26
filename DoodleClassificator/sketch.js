@@ -1,6 +1,10 @@
 const len = 784;
 const total_data = 1000;
 
+const PIANO = 0;
+const KNIFE = 1;
+const CAR = 2;
+
 let pianos_data;
 let knifes_data;
 let cars_data;
@@ -16,13 +20,10 @@ function preload()
     cars_data = loadBytes('data/cars1000.bin');
 }
 
-function setup()
+function prepareData (category, data, label)
 {
-    createCanvas(280,280);
-    background(100);
-
-    pianos.training = [];
-    pianos.testing = [];
+    category.training = [];
+    category.testing = [];
     let threshold = floor( 0.8 * total_data);
 
     for (let i = 0; i < total_data; i++)
@@ -30,14 +31,29 @@ function setup()
         let offset = i * len;
         if (i < threshold)
         {   
-            pianos.training[i] = pianos_data.bytes.subarray(offset, offset + len);
+            category.training[i] = data.bytes.subarray(offset, offset + len);
+            category.training[i].label = label;
         }
         else
         {
-            pianos.testing[i - threshold] = pianos_data.bytes.subarray(offset, offset + len);
+            category.testing[i - threshold] = data.bytes.subarray(offset, offset + len);
+            category.testing[i - threshold].label = label;
         }
     }
-/*    let total = 100;
+}
+function setup()
+{
+    createCanvas(280,280);
+    background(100);
+    prepareData(pianos, pianos_data, PIANO);
+    prepareData(knifes, knifes_data, KNIFE);
+    prepareData(cars,cars_data, CAR);
+
+    
+/*    
+    DRAWING OF THE DATA
+
+    let total = 100;
     for (let n = 0; n < total; n++)
     {
         let img = createImage(28,28);
