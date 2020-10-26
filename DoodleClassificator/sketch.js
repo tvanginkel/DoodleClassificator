@@ -64,7 +64,7 @@ function setup()
     prepareData(cars,cars_data, CAR);
     
     //Creating the neural network
-    nn = new NeuralNetwork(784, 64, 3);
+    let nn = new NeuralNetwork(784, 64, 3);
     
     //Randomize the data
     let training = [];
@@ -72,7 +72,24 @@ function setup()
     training = training.concat(knifes.training);
     training = training.concat(cars.training);
     shuffle(training, true);
-    console.log(training);
+
+    for (let i = 0; i < training.length; i++)
+    {
+        let inputs = [];
+        let data = training[i];
+        //One hot enconding
+        for (let j = 0; j < data.length; j++)
+        {
+            inputs[j] = data[j] / 255.0; 
+        }
+        //Create dummy variables for the output
+        let output = [0, 0, 0,];
+        output[training[i].label] = 1;
+        //Train nn
+        nn.train(inputs, output);
+    }
+
+    console.log("Trained for one epoch");
 }
 
 /*    
